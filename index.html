@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dilekçe Oluştur</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: calibri, "Times New Roman", serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .letter-section {
+      display: none;
+      margin-top: 40px;
+      padding: 40px;
+      background: white;
+      border: none;
+    }
+
+    .center-text {
+      text-align: center;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .left-text {
+      text-align: justify;
+      margin-top: 20px;
+      white-space: pre-line;
+    }
+
+    .download-button {
+      display: none;
+      margin-top: 20px;
+    }
+
+    /* Öğrenci bilgileri sola yaslı */
+    #ogrenciBilgileri {
+      text-align: left;
+    }
+
+    /* Telefonun altında sağa yaslı tarih ve imza */
+    #tarihImzaContainer {
+      margin-top: 10px;
+      text-align: right;
+    }
+
+    #tarihYeri {
+      margin-bottom: 1cm;
+    }
+
+    /* Ders yürütücüsü ve bölüm başkanı alanı */
+    #dersVeBaskan {
+      margin-top: 2cm; /* Telefon ve tarih-imzadan sonra 2cm yukarıda */
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 16px;
+    }
+
+    #dersYurutucu {
+      text-align: left;
+      width: 60%;
+    }
+
+ #bolumBaskaniKutu {
+  text-align: right;
+  width: fit-content;
+  margin-left: auto; /* Sola boşluk vererek sağa yaslar */
+  margin-top: 140px;   /* Üst boşluk eklendi, ayarlanabilir */
+}
+
+
+    #bolumBaskaniBaslik {
+      font-weight: bold;
+    }
+
+    #bolumBaskaniAdi {
+      margin-top: 5px;
+      font-weight: normal;
+      display: block;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      .letter-section, .letter-section * {
+        visibility: visible;
+      }
+
+      .letter-section {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 210mm;
+        height: 297mm;
+        background: white !important;
+        padding: 40px;
+        margin: 0;
+        box-shadow: none !important;
+        border: none !important;
+      }
+
+      .download-button {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Bitirme Çalışması Alma Dilekçesi Oluşturma</h2>
+    <form id="dilekceForm">
+      <label>Adınız:</label>
+      <input type="text" id="ad" required />
+
+      <label>Soyadınız:</label>
+      <input type="text" id="soyad" required />
+
+      <label>Öğrenci Numarası:</label>
+      <input type="text" id="numara" required />
+
+      <label>E-posta:</label>
+      <input type="email" id="email" required />
+
+      <label>Cep Telefonu:</label>
+      <input type="text" id="telefon" required />
+
+      <label>Bitirme Çalışması Aldığınız Öğretim Üyesi (Ünvan-Ad Soyad):</label>
+      <input type="text" id="danisman" required />
+
+      <label>Bitirme Çalışması Konusu:</label>
+      <textarea id="tezkonusu" rows="3" required></textarea>
+
+ <select id="bolumSelect" style="display: none;">
+  <option value="MATEMATİK BÖLÜMÜ" selected>MATEMATİK</option>
+</select>
+
+
+      <button type="submit">Dilekçeyi Oluştur</button>
+    </form>
+
+    <div class="letter-section" id="dilekceOutput">
+    <div style="text-align: center; line-height: 1.4; margin: 0; padding: 0;">
+  <div>YILDIZ TEKNİK ÜNİVERSİTESİ</div>
+  <div>FEN-EDEBİYAT FAKÜLTESİ</div>
+  <div id="bolumYazisi" style="font-weight: bold; margin: 0; padding: 0;"></div>
+</div>
+
+
+
+    <p style="text-align: center;">
+  2025-2026 GÜZ YARIYILI<br>
+  <strong id="dersKodu">MAT9000 BİTİRME ÇALIŞMASI</strong>
+</p>
+
+
+      <div class="left-text" id="ogrenciBilgileri"></div>
+
+      <div id="tarihImzaContainer">
+        <p id="tarihYeri"></p>
+        <p id="imzaAlani">İmza: ___________</p>
+      </div>
+
+<p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong> <br><span id="tezkonusuMetni"></span></p>
+<br><br><br>
+<p style="margin-top: 40px;"><strong>DERS YÜRÜTÜCÜSÜ:</strong><br> <span id="danismanMetni"></span></p>
+
+      
+        <div id="bolumBaskaniKutu">
+          <span id="bolumBaskaniBaslik">BÖLÜM BAŞKANI</span><br />
+          <span id="bolumBaskaniAdi"></span>
+        </div>
+      
+
+    </div>
+
+    <div class="download-button" id="downloadBtnDiv">
+      <button id="downloadBtn">📥 PDF Olarak İndir</button>
+    </div>
+  </div>
+
+  <script>
+    const bolumBaskanlari = {
+      "MATEMATİK BÖLÜMÜ": "Prof. Dr. Mustafa DÜLDÜL",
+      "FİZİK BÖLÜMÜ": "Prof. Dr. Zeynep GÜVEN ÖZDEMİR",
+      "KİMYA BÖLÜMÜ": "Prof. Dr. Ali ERDOĞMUŞ",
+      "İSTATİSTİK BÖLÜMÜ": "Prof. Dr. Fatma NOYAN TEKELİ",
+      "MOLEKÜLER BİYOLOJİ VE GENETİK BÖLÜMÜ": "Prof. Dr. Semiha ERİŞEN",
+      "TÜRK DİLİ VE EDEBİYATI BÖLÜMÜ": "Prof. Dr. Aynur KOÇAK",
+      "BATI DİLLERİ VE EDEBİYATLARI BÖLÜMÜ": "Prof. Dr. Ayşe Banu KARADAĞ"
+    };
+
+const bolumKisaltmalari = {
+  "MATEMATİK BÖLÜMÜ": "MAT9000",
+  "FİZİK BÖLÜMÜ": "FIZ9000",
+  "KİMYA BÖLÜMÜ": "KIM9000",
+  "İSTATİSTİK BÖLÜMÜ": "IST4000",
+  "MOLEKÜLER BİYOLOJİ VE GENETİK BÖLÜMÜ": "MBG4000",
+  "TÜRK DİLİ VE EDEBİYATI BÖLÜMÜ": "TDE4000",
+  "BATI DİLLERİ VE EDEBİYATLARI BÖLÜMÜ": "MTF9000"
+};
+
+
+
+    document.getElementById("dilekceForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const ad = document.getElementById("ad").value.trim();
+      const soyad = document.getElementById("soyad").value.trim();
+      const numara = document.getElementById("numara").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const telefon = document.getElementById("telefon").value.trim();
+      const bolum = document.getElementById("bolumSelect").value;
+      const tezkonusu = document.getElementById("tezkonusu").value.trim();
+      const danisman = document.getElementById("danisman").value.trim();
+
+
+
+      const adSoyad = `${ad}_${soyad}`.replace(/\s+/g, "_");
+
+      const today = new Date();
+      const formattedDate = today.toLocaleDateString("tr-TR");
+
+      // Öğrenci bilgileri sola yaslı
+      const bilgiler = `<strong>Ad Soyad:</strong> ${ad} ${soyad}<br>
+<strong>Öğrenci No:</strong> ${numara}<br>
+<strong>E-posta:</strong> ${email}<br>
+<strong>Cep Telefonu:</strong> ${telefon}<br>`;
+
+      document.getElementById("ogrenciBilgileri").innerHTML = bilgiler;
+      document.getElementById("tezkonusuMetni").innerText = tezkonusu;
+      document.getElementById("tarihYeri").innerText = `Tarih: ${formattedDate}`;
+      document.getElementById("imzaAlani").innerHTML = `İmza: _________`;
+      document.getElementById("bolumYazisi").innerHTML = bolum.replace(/\n/g, "<br>");
+      document.getElementById("danismanMetni").innerText = danisman;
+
+      // Bölüm başkanı adı dinamik atanıyor
+      const baskanAdi = bolumBaskanlari[bolum] || "";
+      document.getElementById("bolumBaskaniAdi").innerText = baskanAdi;
+
+const bolumKodu = bolumKisaltmalari[bolum] || "DERSKODU9000";
+document.getElementById("dersKodu").innerText = `${bolumKodu} BİTİRME ÇALIŞMASI`;
+
+
+      document.getElementById("dilekceOutput").style.display = "block";
+      document.getElementById("downloadBtnDiv").style.display = "block";
+
+      window.adSoyad = adSoyad;
+    });
+
+    document.getElementById("downloadBtn").addEventListener("click", function () {
+      const element = document.getElementById("dilekceOutput");
+      element.style.display = "block";
+
+      setTimeout(() => {
+        const opt = {
+          margin: 0.5,
+          filename: `${window.adSoyad || "dilekce"}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2, scrollX: 0, scrollY: 0 },
+          jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+        };
+
+        html2pdf().set(opt).from(element).save();
+      }, 200);
+    });
+  </script>
+</body>
+</html>
