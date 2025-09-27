@@ -58,12 +58,10 @@
       margin-top: 20px;
     }
 
-    /* Öğrenci bilgileri sola yaslı */
     #ogrenciBilgileri {
       text-align: left;
     }
 
-    /* Telefonun altında sağa yaslı tarih ve imza */
     #tarihImzaContainer {
       margin-top: 10px;
       text-align: right;
@@ -73,9 +71,8 @@
       margin-bottom: 1cm;
     }
 
-    /* Ders yürütücüsü ve bölüm başkanı alanı */
     #dersVeBaskan {
-      margin-top: 2cm; /* Telefon ve tarih-imzadan sonra 2cm yukarıda */
+      margin-top: 2cm;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -87,13 +84,12 @@
       width: 60%;
     }
 
- #bolumBaskaniKutu {
-  text-align: right;
-  width: fit-content;
-  margin-left: auto; /* Sola boşluk vererek sağa yaslar */
-  margin-top: 140px;   /* Üst boşluk eklendi, ayarlanabilir */
-}
-
+    #bolumBaskaniKutu {
+      text-align: right;
+      width: fit-content;
+      margin-left: auto;
+      margin-top: 140px;
+    }
 
     #bolumBaskaniBaslik {
       font-weight: bold;
@@ -152,34 +148,36 @@
       <label>Cep Telefonu:</label>
       <input type="text" id="telefon" required />
 
-      <label>Bitirme Çalışması Aldığınız Öğretim Üyesi (Ünvan-Ad Soyad):</label>
-      <input type="text" id="danisman" required />
+      <label>Bitirme Çalışması Aldığınız Öğretim Üyesi:</label>
+      <select id="unvan">
+        <option value="Prof. Dr.">Prof. Dr.</option>
+        <option value="Doç. Dr.">Doç. Dr.</option>
+        <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
+        <option value="Öğr. Gör. Dr.">Öğr. Gör. Dr.</option>
+      </select>
+      <input type="text" id="danismanAdSoyad" placeholder="Ad Soyad" required />
 
       <label>Bitirme Çalışması Konusu:</label>
       <textarea id="tezkonusu" rows="3" required></textarea>
 
- <select id="bolumSelect" style="display: none;">
-  <option value="MATEMATİK BÖLÜMÜ" selected>MATEMATİK</option>
-</select>
-
+      <select id="bolumSelect" style="display: none;">
+        <option value="MATEMATİK BÖLÜMÜ" selected>MATEMATİK</option>
+      </select>
 
       <button type="submit">Dilekçeyi Oluştur</button>
     </form>
 
     <div class="letter-section" id="dilekceOutput">
-    <div style="text-align: center; line-height: 1.4; margin: 0; padding: 0;">
-  <div>YILDIZ TEKNİK ÜNİVERSİTESİ</div>
-  <div>FEN-EDEBİYAT FAKÜLTESİ</div>
-  <div id="bolumYazisi" style="font-weight: bold; margin: 0; padding: 0;"></div>
-</div>
+      <div style="text-align: center; line-height: 1.4; margin: 0; padding: 0;">
+        <div>YILDIZ TEKNİK ÜNİVERSİTESİ</div>
+        <div>FEN-EDEBİYAT FAKÜLTESİ</div>
+        <div id="bolumYazisi" style="font-weight: bold; margin: 0; padding: 0;"></div>
+      </div>
 
-
-
-    <p style="text-align: center;">
-  2025-2026 GÜZ YARIYILI<br>
-  <strong id="dersKodu">MAT9000 BİTİRME ÇALIŞMASI</strong>
-</p>
-
+      <p style="text-align: center;">
+        2025-2026 GÜZ YARIYILI<br>
+        <strong id="dersKodu">MAT9000 BİTİRME ÇALIŞMASI</strong>
+      </p>
 
       <div class="left-text" id="ogrenciBilgileri"></div>
 
@@ -188,17 +186,15 @@
         <p id="imzaAlani">İmza: ___________</p>
       </div>
 
-<p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong> <br><span id="tezkonusuMetni"></span></p>
-<br><br><br>
-<p style="margin-top: 40px;"><strong>DERS YÜRÜTÜCÜSÜ:</strong><br> <span id="danismanMetni"></span></p>
+      <p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong> <br><span id="tezkonusuMetni"></span></p>
 
-      
-        <div id="bolumBaskaniKutu">
-          <span id="bolumBaskaniBaslik">BÖLÜM BAŞKANI</span><br />
-          <span id="bolumBaskaniAdi"></span>
-        </div>
-      
+      <br><br><br>
+      <p style="margin-top: 40px;"><strong>DERS YÜRÜTÜCÜSÜ:</strong><br> <span id="danismanMetni"></span></p>
 
+      <div id="bolumBaskaniKutu">
+        <span id="bolumBaskaniBaslik">BÖLÜM BAŞKANI</span><br />
+        <span id="bolumBaskaniAdi"></span>
+      </div>
     </div>
 
     <div class="download-button" id="downloadBtnDiv">
@@ -217,17 +213,15 @@
       "BATI DİLLERİ VE EDEBİYATLARI BÖLÜMÜ": "Prof. Dr. Ayşe Banu KARADAĞ"
     };
 
-const bolumKisaltmalari = {
-  "MATEMATİK BÖLÜMÜ": "MAT9000",
-  "FİZİK BÖLÜMÜ": "FIZ9000",
-  "KİMYA BÖLÜMÜ": "KIM9000",
-  "İSTATİSTİK BÖLÜMÜ": "IST4000",
-  "MOLEKÜLER BİYOLOJİ VE GENETİK BÖLÜMÜ": "MBG4000",
-  "TÜRK DİLİ VE EDEBİYATI BÖLÜMÜ": "TDE4000",
-  "BATI DİLLERİ VE EDEBİYATLARI BÖLÜMÜ": "MTF9000"
-};
-
-
+    const bolumKisaltmalari = {
+      "MATEMATİK BÖLÜMÜ": "MAT9000",
+      "FİZİK BÖLÜMÜ": "FIZ9000",
+      "KİMYA BÖLÜMÜ": "KIM9000",
+      "İSTATİSTİK BÖLÜMÜ": "IST4000",
+      "MOLEKÜLER BİYOLOJİ VE GENETİK BÖLÜMÜ": "MBG4000",
+      "TÜRK DİLİ VE EDEBİYATI BÖLÜMÜ": "TDE4000",
+      "BATI DİLLERİ VE EDEBİYATLARI BÖLÜMÜ": "MTF9000"
+    };
 
     document.getElementById("dilekceForm").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -239,16 +233,16 @@ const bolumKisaltmalari = {
       const telefon = document.getElementById("telefon").value.trim();
       const bolum = document.getElementById("bolumSelect").value;
       const tezkonusu = document.getElementById("tezkonusu").value.trim();
-      const danisman = document.getElementById("danisman").value.trim();
 
-
+      const unvan = document.getElementById("unvan").value;
+      const danismanAdSoyad = document.getElementById("danismanAdSoyad").value.trim();
+      const danisman = `${unvan} ${danismanAdSoyad}`;
 
       const adSoyad = `${ad}_${soyad}`.replace(/\s+/g, "_");
 
       const today = new Date();
       const formattedDate = today.toLocaleDateString("tr-TR");
 
-      // Öğrenci bilgileri sola yaslı
       const bilgiler = `<strong>Ad Soyad:</strong> ${ad} ${soyad}<br>
 <strong>Öğrenci No:</strong> ${numara}<br>
 <strong>E-posta:</strong> ${email}<br>
@@ -261,13 +255,11 @@ const bolumKisaltmalari = {
       document.getElementById("bolumYazisi").innerHTML = bolum.replace(/\n/g, "<br>");
       document.getElementById("danismanMetni").innerText = danisman;
 
-      // Bölüm başkanı adı dinamik atanıyor
       const baskanAdi = bolumBaskanlari[bolum] || "";
       document.getElementById("bolumBaskaniAdi").innerText = baskanAdi;
 
-const bolumKodu = bolumKisaltmalari[bolum] || "DERSKODU9000";
-document.getElementById("dersKodu").innerText = `${bolumKodu} BİTİRME ÇALIŞMASI`;
-
+      const bolumKodu = bolumKisaltmalari[bolum] || "DERSKODU9000";
+      document.getElementById("dersKodu").innerText = `${bolumKodu} BİTİRME ÇALIŞMASI`;
 
       document.getElementById("dilekceOutput").style.display = "block";
       document.getElementById("downloadBtnDiv").style.display = "block";
