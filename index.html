@@ -20,11 +20,15 @@
     }
 
     input, select, textarea {
-      width: 100%;
-      padding: 8px;
+      font-size: 16px;
       margin-top: 6px;
       margin-bottom: 16px;
-      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
     }
 
     button {
@@ -39,12 +43,6 @@
       padding: 40px;
       background: white;
       border: none;
-    }
-
-    .center-text {
-      text-align: center;
-      margin: 0;
-      line-height: 1.3;
     }
 
     .left-text {
@@ -71,19 +69,6 @@
       margin-bottom: 1cm;
     }
 
-    #dersVeBaskan {
-      margin-top: 2cm;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      font-size: 16px;
-    }
-
-    #dersYurutucu {
-      text-align: left;
-      width: 60%;
-    }
-
     #bolumBaskaniKutu {
       text-align: right;
       width: fit-content;
@@ -99,6 +84,15 @@
       margin-top: 5px;
       font-weight: normal;
       display: block;
+    }
+
+    .row-flex {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row-flex > * {
+      flex: 1;
     }
 
     @media print {
@@ -149,16 +143,19 @@
       <input type="text" id="telefon" required />
 
       <label>Bitirme Çalışması Aldığınız Öğretim Üyesi:</label>
-      <select id="unvan">
-        <option value="Prof. Dr.">Prof. Dr.</option>
-        <option value="Doç. Dr.">Doç. Dr.</option>
-        <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
-        <option value="Öğr. Gör. Dr.">Öğr. Gör. Dr.</option>
-      </select>
-      <input type="text" id="danismanAdSoyad" placeholder="Ad Soyad" required />
+      <div class="row-flex">
+        <select id="unvan" required>
+          <option value="" disabled selected>Ünvan Seçiniz</option>
+          <option value="Prof. Dr.">Prof. Dr.</option>
+          <option value="Doç. Dr.">Doç. Dr.</option>
+          <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
+          <option value="Öğr. Gör. Dr.">Öğr. Gör. Dr.</option>
+        </select>
+        <input type="text" id="danismanAdSoyad" placeholder="Ad Soyad" required />
+      </div>
 
       <label>Bitirme Çalışması Konusu:</label>
-      <textarea id="tezkonusu" rows="3" required></textarea>
+      <textarea id="tezkonusu" rows="5" required placeholder=""></textarea>
 
       <select id="bolumSelect" style="display: none;">
         <option value="MATEMATİK BÖLÜMÜ" selected>MATEMATİK</option>
@@ -186,7 +183,7 @@
         <p id="imzaAlani">İmza: ___________</p>
       </div>
 
-      <p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong> <br><span id="tezkonusuMetni"></span></p>
+      <p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong><br><span id="tezkonusuMetni"></span></p>
 
       <br><br><br>
       <p style="margin-top: 40px;"><strong>DERS YÜRÜTÜCÜSÜ:</strong><br> <span id="danismanMetni"></span></p>
@@ -204,23 +201,11 @@
 
   <script>
     const bolumBaskanlari = {
-      "MATEMATİK BÖLÜMÜ": "Prof. Dr. Mustafa DÜLDÜL",
-      "FİZİK BÖLÜMÜ": "Prof. Dr. Zeynep GÜVEN ÖZDEMİR",
-      "KİMYA BÖLÜMÜ": "Prof. Dr. Ali ERDOĞMUŞ",
-      "İSTATİSTİK BÖLÜMÜ": "Prof. Dr. Fatma NOYAN TEKELİ",
-      "MOLEKÜLER BİYOLOJİ VE GENETİK BÖLÜMÜ": "Prof. Dr. Semiha ERİŞEN",
-      "TÜRK DİLİ VE EDEBİYATI BÖLÜMÜ": "Prof. Dr. Aynur KOÇAK",
-      "BATI DİLLERİ VE EDEBİYATLARI BÖLÜMÜ": "Prof. Dr. Ayşe Banu KARADAĞ"
+      "MATEMATİK BÖLÜMÜ": "Prof. Dr. Mustafa DÜLDÜL"
     };
 
     const bolumKisaltmalari = {
-      "MATEMATİK BÖLÜMÜ": "MAT9000",
-      "FİZİK BÖLÜMÜ": "FIZ9000",
-      "KİMYA BÖLÜMÜ": "KIM9000",
-      "İSTATİSTİK BÖLÜMÜ": "IST4000",
-      "MOLEKÜLER BİYOLOJİ VE GENETİK BÖLÜMÜ": "MBG4000",
-      "TÜRK DİLİ VE EDEBİYATI BÖLÜMÜ": "TDE4000",
-      "BATI DİLLERİ VE EDEBİYATLARI BÖLÜMÜ": "MTF9000"
+      "MATEMATİK BÖLÜMÜ": "MAT9000"
     };
 
     document.getElementById("dilekceForm").addEventListener("submit", function (e) {
@@ -239,7 +224,6 @@
       const danisman = `${unvan} ${danismanAdSoyad}`;
 
       const adSoyad = `${ad}_${soyad}`.replace(/\s+/g, "_");
-
       const today = new Date();
       const formattedDate = today.toLocaleDateString("tr-TR");
 
@@ -251,15 +235,10 @@
       document.getElementById("ogrenciBilgileri").innerHTML = bilgiler;
       document.getElementById("tezkonusuMetni").innerText = tezkonusu;
       document.getElementById("tarihYeri").innerText = `Tarih: ${formattedDate}`;
-      document.getElementById("imzaAlani").innerHTML = `İmza: _________`;
-      document.getElementById("bolumYazisi").innerHTML = bolum.replace(/\n/g, "<br>");
       document.getElementById("danismanMetni").innerText = danisman;
-
-      const baskanAdi = bolumBaskanlari[bolum] || "";
-      document.getElementById("bolumBaskaniAdi").innerText = baskanAdi;
-
-      const bolumKodu = bolumKisaltmalari[bolum] || "DERSKODU9000";
-      document.getElementById("dersKodu").innerText = `${bolumKodu} BİTİRME ÇALIŞMASI`;
+      document.getElementById("bolumYazisi").innerHTML = bolum;
+      document.getElementById("bolumBaskaniAdi").innerText = bolumBaskanlari[bolum] || "";
+      document.getElementById("dersKodu").innerText = `${bolumKisaltmalari[bolum] || "DERSKODU"} BİTİRME ÇALIŞMASI`;
 
       document.getElementById("dilekceOutput").style.display = "block";
       document.getElementById("downloadBtnDiv").style.display = "block";
