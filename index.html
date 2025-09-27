@@ -24,9 +24,6 @@
       margin-top: 6px;
       margin-bottom: 16px;
       box-sizing: border-box;
-    }
-
-    input, select, textarea {
       width: 100%;
       padding: 8px;
     }
@@ -139,7 +136,7 @@
       <label>E-posta:</label>
       <div class="row-flex">
         <input type="text" id="emailUsername" placeholder="kullaniciadi" required />
-        <span style="align-self: center;">@std.yildiz.edu.tr</span>
+        <span style="align-self: center;">@hotmail.com</span>
       </div>
 
       <label>Cep Telefonu:</label>
@@ -158,7 +155,7 @@
       </div>
 
       <label>Bitirme Çalışması Konusu:</label>
-      <textarea id="tezkonusu" rows="5" required placeholder=""></textarea>
+      <textarea id="tezkonusu" rows="5" required></textarea>
 
       <select id="bolumSelect" style="display: none;">
         <option value="MATEMATİK BÖLÜMÜ" selected>MATEMATİK</option>
@@ -168,10 +165,10 @@
     </form>
 
     <div class="letter-section" id="dilekceOutput">
-      <div style="text-align: center; line-height: 1.4; margin: 0; padding: 0;">
+      <div style="text-align: center; line-height: 1.4;">
         <div>YILDIZ TEKNİK ÜNİVERSİTESİ</div>
         <div>FEN-EDEBİYAT FAKÜLTESİ</div>
-        <div id="bolumYazisi" style="font-weight: bold; margin: 0; padding: 0;"></div>
+        <div id="bolumYazisi" style="font-weight: bold;"></div>
       </div>
 
       <p style="text-align: center;">
@@ -187,7 +184,6 @@
 
       <p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong><br><span id="tezkonusuMetni"></span></p>
 
-      <br><br><br>
       <p style="margin-top: 40px;"><strong>DERS YÜRÜTÜCÜSÜ:</strong><br> <span id="danismanMetni"></span></p>
 
       <div id="bolumBaskaniKutu">
@@ -195,7 +191,6 @@
         <span id="bolumBaskaniAdi"></span>
       </div>
 
-      <!-- PDF Altına silik e-posta notu -->
       <p id="epostaNotu" style="
         text-align: center;
         font-size: 12px;
@@ -219,10 +214,16 @@
       "MATEMATİK BÖLÜMÜ": "MAT9000"
     };
 
-    // '@' yazımını engelle
-    document.getElementById("emailUsername").addEventListener("keydown", function(e) {
-      if (e.key === "@") {
-        e.preventDefault();
+    const emailInput = document.getElementById("emailUsername");
+
+    // Masaüstü ve mobilde @ yazımını ve yapıştırmayı engelle
+    emailInput.addEventListener("keydown", function(e) {
+      if (e.key === "@") e.preventDefault();
+    });
+
+    emailInput.addEventListener("input", function() {
+      if (emailInput.value.includes("@")) {
+        emailInput.value = emailInput.value.replace(/@/g, "");
       }
     });
 
@@ -232,8 +233,8 @@
       const ad = document.getElementById("ad").value.trim();
       const soyad = document.getElementById("soyad").value.trim();
       const numara = document.getElementById("numara").value.trim();
-      const emailUsername = document.getElementById("emailUsername").value.trim();
-      const email = `${emailUsername}@std.yildiz.edu.tr`;
+      const emailUsername = emailInput.value.trim();
+      const email = `${emailUsername}@hotmail.com`;
       const telefon = document.getElementById("telefon").value.trim();
       const bolum = document.getElementById("bolumSelect").value;
       const tezkonusu = document.getElementById("tezkonusu").value.trim();
@@ -259,9 +260,7 @@
       document.getElementById("bolumBaskaniAdi").innerText = bolumBaskanlari[bolum] || "";
       document.getElementById("dersKodu").innerText = `${bolumKisaltmalari[bolum] || "DERSKODU"} BİTİRME ÇALIŞMASI`;
 
-      // Silik e-posta alt notu
-      document.getElementById("epostaNotu").innerText =
-        `Bu belge ${email} adresinden bölüme iletilmiştir.`;
+      document.getElementById("epostaNotu").innerText = `Bu belge ${email} adresinden bölüme iletilmiştir.`;
 
       document.getElementById("dilekceOutput").style.display = "block";
       document.getElementById("downloadBtnDiv").style.display = "block";
