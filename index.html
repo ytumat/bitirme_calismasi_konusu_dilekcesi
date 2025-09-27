@@ -137,7 +137,10 @@
       <input type="text" id="numara" required />
 
       <label>E-posta:</label>
-      <input type="email" id="email" required />
+      <div class="row-flex">
+        <input type="text" id="emailUsername" placeholder="kullaniciadi" required />
+        <span style="align-self: center;">@std.yildiz.edu.tr</span>
+      </div>
 
       <label>Cep Telefonu:</label>
       <input type="text" id="telefon" required />
@@ -180,7 +183,6 @@
 
       <div id="tarihImzaContainer">
         <p id="tarihYeri"></p>
-        <p id="imzaAlani">İmza: _________</p>
       </div>
 
       <p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong><br><span id="tezkonusuMetni"></span></p>
@@ -192,6 +194,15 @@
         <span id="bolumBaskaniBaslik">BÖLÜM BAŞKANI</span><br />
         <span id="bolumBaskaniAdi"></span>
       </div>
+
+      <!-- PDF Altına silik e-posta notu -->
+      <p id="epostaNotu" style="
+        text-align: center;
+        font-size: 12px;
+        margin-top: 60px;
+        color: rgba(0, 0, 0, 0.3);
+        font-style: italic;
+      "></p>
     </div>
 
     <div class="download-button" id="downloadBtnDiv">
@@ -208,13 +219,21 @@
       "MATEMATİK BÖLÜMÜ": "MAT9000"
     };
 
+    // '@' yazımını engelle
+    document.getElementById("emailUsername").addEventListener("keydown", function(e) {
+      if (e.key === "@") {
+        e.preventDefault();
+      }
+    });
+
     document.getElementById("dilekceForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
       const ad = document.getElementById("ad").value.trim();
       const soyad = document.getElementById("soyad").value.trim();
       const numara = document.getElementById("numara").value.trim();
-      const email = document.getElementById("email").value.trim();
+      const emailUsername = document.getElementById("emailUsername").value.trim();
+      const email = `${emailUsername}@std.yildiz.edu.tr`;
       const telefon = document.getElementById("telefon").value.trim();
       const bolum = document.getElementById("bolumSelect").value;
       const tezkonusu = document.getElementById("tezkonusu").value.trim();
@@ -239,6 +258,10 @@
       document.getElementById("bolumYazisi").innerHTML = bolum;
       document.getElementById("bolumBaskaniAdi").innerText = bolumBaskanlari[bolum] || "";
       document.getElementById("dersKodu").innerText = `${bolumKisaltmalari[bolum] || "DERSKODU"} BİTİRME ÇALIŞMASI`;
+
+      // Silik e-posta alt notu
+      document.getElementById("epostaNotu").innerText =
+        `Bu belge ${email} adresinden bölüme iletilmiştir.`;
 
       document.getElementById("dilekceOutput").style.display = "block";
       document.getElementById("downloadBtnDiv").style.display = "block";
@@ -265,4 +288,3 @@
   </script>
 </body>
 </html>
-
