@@ -118,6 +118,81 @@
         display: none !important;
       }
     }
+
+/* 🌟 Mobil Uyumluluk Geliştirmeleri (MODERN – TAM RESPONSIVE) */
+
+@media (max-width: 768px) {
+
+  body {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .container {
+    padding: 12px;
+    width: 100%;
+  }
+
+  input, select, textarea {
+    font-size: 14px;
+    padding: 6px;
+    margin-bottom: 8px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .logo-image {
+    max-width: 55px !important;
+  }
+
+  .alt-kisim {
+    flex-direction: column !important;
+  }
+
+  .sol-metni, .sag-tablo {
+    max-width: 100% !important;
+  }
+
+  .letter-section {
+    padding: 20px !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .center-text {
+    font-size: 14px;
+  }
+
+  .sol-metni {
+    font-size: 12px;
+  }
+
+  table th, table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .tarih-sag {
+    font-size: 14px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -180,6 +255,15 @@
 
       <div id="tarihImzaContainer">        
         <p id="tarihYeri"></p>
+
+<p id="epostaNotu" style="
+  text-align: center;
+  font-size: 14px;
+  color: red;
+  font-style: italic;
+  margin-top: 5px;
+"></p>
+
        </div>
 
       <p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong><br><span id="tezkonusuMetni"></span></p>
@@ -191,13 +275,8 @@
         <span id="bolumBaskaniAdi"></span>
       </div>
 
-      <p id="epostaNotu" style="
-        text-align: center;
-        font-size: 12px;
-        margin-top: 60px;
-        color: rgba(0, 0, 0, 0.3);
-        font-style: italic;
-      "></p>
+     
+
     </div>
 
     <div class="download-button" id="downloadBtnDiv">
@@ -287,8 +366,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
