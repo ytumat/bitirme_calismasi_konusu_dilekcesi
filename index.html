@@ -2,225 +2,51 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dilekçe Oluştur</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body {
-      font-family: calibri, "Times New Roman", serif;
-      background-color: #f4f4f4;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    input, select, textarea {
-      font-size: 16px;
-      margin-top: 6px;
-      margin-bottom: 16px;
-      box-sizing: border-box;
-      width: 100%;
-      padding: 8px;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-
-    .letter-section {
-      display: none;
-      margin-top: 40px;
-      padding: 40px;
-      background: white;
-      border: none;
-    }
-
-    .left-text {
-      text-align: justify;
-      margin-top: 20px;
-      white-space: pre-line;
-    }
-
-    .download-button {
-      display: none;
-      margin-top: 20px;
-    }
-
-    #ogrenciBilgileri {
-      text-align: left;
-    }
-
-    #tarihImzaContainer {
-      margin-top: 10px;
-      text-align: right;
-    }
-
-    #tarihYeri {
-      margin-bottom: 1cm;
-    }
-
-    #bolumBaskaniKutu {
-      text-align: right;
-      width: fit-content;
-      margin-left: auto;
-      margin-top: 140px;
-    }
-
-    #bolumBaskaniBaslik {
-      font-weight: bold;
-    }
-
-    #bolumBaskaniAdi {
-      margin-top: 5px;
-      font-weight: normal;
-      display: block;
-    }
-
-    .row-flex {
-      display: flex;
-      gap: 10px;
-    }
-
-    .row-flex > * {
-      flex: 1;
-    }
-
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-
-      .letter-section, .letter-section * {
-        visibility: visible;
-      }
-
-      .letter-section {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 210mm;
-        height: 297mm;
-        background: white !important;
-        padding: 40px;
-        margin: 0;
-        box-shadow: none !important;
-        border: none !important;
-      }
-
-      .download-button {
-        display: none !important;
-      }
-    }
-
-/* 🌟 Mobil Uyumluluk Geliştirmeleri (MODERN – TAM RESPONSIVE) */
-
-@media (max-width: 768px) {
-
-  body {
-    font-size: 13px;
-    padding: 10px;
-  }
-
-  .container {
-    padding: 12px;
-    width: 100%;
-  }
-
-  input, select, textarea {
-    font-size: 14px;
-    padding: 6px;
-    margin-bottom: 8px;
-  }
-
-  button {
-    width: 100%;
-    margin-top: 12px;
-  }
-
-  .logo-image {
-    max-width: 55px !important;
-  }
-
-  .alt-kisim {
-    flex-direction: column !important;
-  }
-
-  .sol-metni, .sag-tablo {
-    max-width: 100% !important;
-  }
-
-  .letter-section {
-    padding: 20px !important;
-    width: 100% !important;
-    box-sizing: border-box;
-  }
-}
-
-
-@media (max-width: 480px) {
-
-  h2 {
-    font-size: 18px;
-    text-align: center;
-  }
-
-  .center-text {
-    font-size: 14px;
-  }
-
-  .sol-metni {
-    font-size: 12px;
-  }
-
-  table th, table td {
-    font-size: 12px;
-    padding: 6px;
-  }
-
-  .table-wrapper {
-    overflow-x: auto;
-  }
-
-  .tarih-sag {
-    font-size: 14px;
-  }
-}
-
+    body { font-family: Calibri, sans-serif; background-color: #f4f4f4; padding: 10px; margin: 0; }
+    .container { max-width: 600px; margin: 20px auto; background: white; padding: 25px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; }
+    h2 { text-align: center; color: #333; font-size: 1.3rem; margin-bottom: 20px; }
+    label { display: block; margin-top: 15px; font-weight: bold; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 12px; margin-top: 6px; font-size: 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
+    .row-flex { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+    .row-flex input { margin-top: 0; flex: 1; }
+    button { width: 100%; padding: 15px; font-size: 18px; cursor: pointer; background-color: #28a745; color: white; border: none; border-radius: 4px; margin-top: 25px; font-weight: bold; }
+    
+    #pdf-container { position: absolute; left: -9999px; top: 0; }
+    #dilekceOutput { background: white; color: black; width: 190mm; padding: 20mm; box-sizing: border-box; line-height: 1.5; }
+    .center-header { text-align: center; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
+    .info-section { margin: 20px 0; }
+    .info-row { display: flex; margin-bottom: 4px; }
+    .info-label { width: 130px; font-weight: bold; }
+    .footer-section { margin-top: 80px; text-align: right; }
+    .red-note { color: #b30000; font-weight: bold; text-align: center; font-size: 11pt; margin-top: 20px; }
   </style>
 </head>
 <body>
+
   <div class="container">
     <h2>Bitirme Çalışması Alma Dilekçesi Oluşturma</h2>
     <form id="dilekceForm">
-      <label>Adınız:</label>
-      <input type="text" id="ad" required />
-
-      <label>Soyadınız:</label>
-      <input type="text" id="soyad" required />
-
-      <label>Öğrenci Numarası:</label>
-      <input type="text" id="numara" required />
-
-      <label>E-posta:</label>
       <div class="row-flex">
-        <input type="text" id="emailUsername" placeholder="kullaniciadi" required />
-        <span style="align-self: center;">@std.yildiz.edu.tr</span>
+       <input type="text" id="ad" placeholder="Adınız" required />
+       <input type="text" id="soyad" placeholder="Soyadınız" required />
       </div>
-
-      <label>Cep Telefonu:</label>
-      <input type="text" id="telefon" required />
-
-      <label>Bitirme Çalışması Aldığınız Öğretim Üyesi:</label>
+      <label>Öğrenci Numarası:</label>
+      <input type="text" id="numara" inputmode="numeric" required />
+      <label>YTÜ E-posta Kullanıcı Adınız:</label>
       <div class="row-flex">
-        <select id="unvan" required>
-          <option value="" disabled selected>Ünvan Seçiniz</option>
+        <input type="text" id="emailUsername" placeholder="kullanici.adi" required oninput="emailKontrol(this)" />
+        <span style="font-weight:bold">@std.yildiz.edu.tr</span>
+      </div>
+      <label>Cep Telefonu:</label>
+      <input type="text" id="telefon" placeholder="05XX XXX XX XX" inputmode="tel" required />
+      <label>Öğretim Üyesi:</label>
+      <div class="row-flex">
+        <select id="unvan" style="flex: 0.4;">
           <option value="Prof. Dr.">Prof. Dr.</option>
           <option value="Doç. Dr.">Doç. Dr.</option>
           <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
@@ -228,142 +54,110 @@
         </select>
         <input type="text" id="danismanAdSoyad" placeholder="Ad Soyad" required />
       </div>
-
       <label>Bitirme Çalışması Konusu:</label>
-      <textarea id="tezkonusu" rows="5" required></textarea>
-
-      <select id="bolumSelect" style="display: none;">
-        <option value="MATEMATİK BÖLÜMÜ" selected>MATEMATİK</option>
-      </select>
-
-      <button type="submit">Dilekçeyi Oluştur</button>
+      <textarea id="tezkonusu" rows="3" placeholder="Konu başlığını yazınız..." required></textarea>
+      <button type="submit">📄 PDF Olarak İndir</button>
     </form>
+  </div>
 
-    <div class="letter-section" id="dilekceOutput">
-      <div style="text-align: center; line-height: 1.4;">
-        <div>YILDIZ TEKNİK ÜNİVERSİTESİ</div>
-        <div>FEN-EDEBİYAT FAKÜLTESİ</div>
-        <div id="bolumYazisi" style="font-weight: bold;"></div>
+  <div id="pdf-container">
+    <div id="dilekceOutput">
+      <div class="center-header">
+        YILDIZ TEKNİK ÜNİVERSİTESİ<br>FEN-EDEBİYAT FAKÜLTESİ<br>MATEMATİK BÖLÜM BAŞKANLIĞINA
       </div>
 
-      <p style="text-align: center;">
-        2025-2026 BAHAR YARIYILI<br>
-        <strong id="dersKodu">MAT9000 BİTİRME ÇALIŞMASI</strong>
+      <p style="text-align: center; text-transform: uppercase;">
+        <span id="outAkademikYil"></span> <span id="outDonem"></span> YARIYILI<br>MAT9000 BİTİRME ÇALIŞMASI
       </p>
 
-      <div class="left-text" id="ogrenciBilgileri"></div>
-
-      <div id="tarihImzaContainer">        
-        <p id="tarihYeri"></p>
-
-<p id="epostaNotu" style="
-  text-align: center;
-  font-size: 14px;
-  color: red;
-  font-style: italic;
-  margin-top: 5px;
-"></p>
-
-       </div>
-
-      <p style="margin-top: 40px;"><strong>BİTİRME ÇALIŞMASININ KONUSU:</strong><br><span id="tezkonusuMetni"></span></p>
-
-      <p style="margin-top: 100px;"><strong>DERS YÜRÜTÜCÜSÜ:</strong><br> <span id="danismanMetni"></span></p>
-
-      <div id="bolumBaskaniKutu">
-        <span id="bolumBaskaniBaslik">BÖLÜM BAŞKANI</span><br />
-        <span id="bolumBaskaniAdi"></span>
+      <div class="info-section">
+        <div class="info-row"><span class="info-label">Ad Soyad</span><span>: </span><span id="outAdSoyad"></span></div>
+        <div class="info-row"><span class="info-label">Öğrenci No</span><span>: </span><span id="outNo"></span></div>
+        <div class="info-row"><span class="info-label">E-posta</span><span>: </span><span id="outEmail"></span></div>
+        <div class="info-row"><span class="info-label">Cep Telefonu</span><span>: </span><span id="outTel"></span></div>
       </div>
 
-     
+      <div style="text-align: right; margin: 20px 0;" id="outTarih"></div>
+      <p class="red-note" id="outEpostaNotu"></p>
 
-    </div>
+      <div style="margin-top: 40px;">
+        <strong>BİTİRME ÇALIŞMASININ KONUSU:</strong><br>
+        <span id="outKonu" style="text-align: justify; display: block;"></span>
+      </div>
 
-    <div class="download-button" id="downloadBtnDiv">
-      <button id="downloadBtn">📥 PDF Olarak İndir</button>
+      <div style="margin-top: 40px;">
+        <strong>DERS YÜRÜTÜCÜSÜ:</strong><br>
+        <span id="outDanisman"></span>
+      </div>
+
+      <div class="footer-section">
+        <span style="font-weight: bold;">BÖLÜM BAŞKANI</span><br>Prof. Dr. Mustafa DÜLDÜL
+      </div>
     </div>
   </div>
 
   <script>
-    const bolumBaskanlari = {
-      "MATEMATİK BÖLÜMÜ": "Prof. Dr. Mustafa DÜLDÜL"
-    };
+    const { jsPDF } = window.jspdf;
 
-    const bolumKisaltmalari = {
-      "MATEMATİK BÖLÜMÜ": "MAT9000"
-    };
-
-    const emailInput = document.getElementById("emailUsername");
-
-    // Masaüstü ve mobilde @ yazımını ve yapıştırmayı engelle
-    emailInput.addEventListener("keydown", function(e) {
-      if (e.key === "@") e.preventDefault();
-    });
-
-    emailInput.addEventListener("input", function() {
-      if (emailInput.value.includes("@")) {
-        emailInput.value = emailInput.value.replace(/@/g, "");
+    function emailKontrol(input) {
+      if (input.value.includes('@')) {
+        alert("Sadece kullanıcı adınızı yazınız.");
+        input.value = input.value.replace(/@/g, '');
       }
-    });
+    }
+
+    function trUpper(text) { return text.replace(/i/g, "İ").replace(/ı/g, "I").toUpperCase(); }
+
+    function formatTelefon(text) {
+      let num = text.replace(/\D/g, '');
+      if (num.startsWith('0')) num = num.substring(1);
+      if (num.length === 10) return `(${num.substring(0, 3)}) ${num.substring(3, 6)} ${num.substring(6, 10)}`;
+      return text;
+    }
+
+    function capitalizeWords(text) {
+      return text.split(' ').map(word => {
+        if(word.length === 0) return word;
+        return word.charAt(0).replace(/i/g, "İ").replace(/ı/g, "I").toUpperCase() + word.slice(1).toLowerCase();
+      }).join(' ');
+    }
 
     document.getElementById("dilekceForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const ad = document.getElementById("ad").value.trim();
-      const soyad = document.getElementById("soyad").value.trim();
-      const numara = document.getElementById("numara").value.trim();
-      const emailUsername = emailInput.value.trim();
-      const email = `${emailUsername}@std.yildiz.edu.tr`;
-      const telefon = document.getElementById("telefon").value.trim();
-      const bolum = document.getElementById("bolumSelect").value;
-      const tezkonusu = document.getElementById("tezkonusu").value.trim();
+      const ad = trUpper(document.getElementById("ad").value.trim());
+      const soyad = trUpper(document.getElementById("soyad").value.trim());
+      const email = document.getElementById("emailUsername").value.trim() + "@std.yildiz.edu.tr";
+      const tarih = new Date();
+      
+      // OTOMATİK DÖNEM VE YIL HESAPLAMA
+      const ay = tarih.getMonth() + 1; // 1-12
+      const yil = tarih.getFullYear();
+      let donem = (ay >= 2 && ay <= 7) ? "BAHAR" : "GÜZ";
+      let akademikYil = (donem === "BAHAR") ? `${yil-1}-${yil}` : `${yil}-${yil+1}`;
 
-      const unvan = document.getElementById("unvan").value;
-      const danismanAdSoyad = document.getElementById("danismanAdSoyad").value.trim();
-      const danisman = `${unvan} ${danismanAdSoyad}`;
+      document.getElementById("outAdSoyad").innerText = ad + " " + soyad;
+      document.getElementById("outNo").innerText = document.getElementById("numara").value;
+      document.getElementById("outEmail").innerText = email;
+      document.getElementById("outTel").innerText = formatTelefon(document.getElementById("telefon").value);
+      document.getElementById("outTarih").innerText = "Tarih: " + tarih.toLocaleDateString("tr-TR");
+      document.getElementById("outEpostaNotu").innerText = `Bu belge ${email} adresinden bölüme iletilmiştir.`;
+      document.getElementById("outKonu").innerText = capitalizeWords(document.getElementById("tezkonusu").value.trim());
+      document.getElementById("outDanisman").innerText = document.getElementById("unvan").value + " " + capitalizeWords(document.getElementById("danismanAdSoyad").value.trim());
+      
+      document.getElementById("outAkademikYil").innerText = akademikYil;
+      document.getElementById("outDonem").innerText = donem;
 
-      const adSoyad = `${ad}_${soyad}`.replace(/\s+/g, "_");
-      const today = new Date();
-      const formattedDate = today.toLocaleDateString("tr-TR");
-
-      const bilgiler = `<strong>Ad Soyad:</strong> ${ad} ${soyad}<br>
-<strong>Öğrenci No:</strong> ${numara}<br>
-<strong>E-posta:</strong> ${email}<br>
-<strong>Cep Telefonu:</strong> ${telefon}<br>`;
-
-      document.getElementById("ogrenciBilgileri").innerHTML = bilgiler;
-      document.getElementById("tezkonusuMetni").innerText = tezkonusu;
-      document.getElementById("tarihYeri").innerText = `Tarih: ${formattedDate}`;
-      document.getElementById("danismanMetni").innerText = danisman;
-      document.getElementById("bolumYazisi").innerHTML = bolum;
-      document.getElementById("bolumBaskaniAdi").innerText = bolumBaskanlari[bolum] || "";
-      document.getElementById("dersKodu").innerText = `${bolumKisaltmalari[bolum] || "DERSKODU"} BİTİRME ÇALIŞMASI`;
-
-      document.getElementById("epostaNotu").innerText = `Bu belge ${email} adresinden bölüme iletilmiştir.`;
-
-      document.getElementById("dilekceOutput").style.display = "block";
-      document.getElementById("downloadBtnDiv").style.display = "block";
-
-      window.adSoyad = adSoyad;
-    });
-
-    document.getElementById("downloadBtn").addEventListener("click", function () {
-      const element = document.getElementById("dilekceOutput");
-      element.style.display = "block";
-
-      setTimeout(() => {
-        const opt = {
-          margin: 0.5,
-          filename: `${window.adSoyad || "dilekce"}.pdf`,
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2, scrollX: 0, scrollY: 0 },
-          jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
-        };
-
-        html2pdf().set(opt).from(element).save();
-      }, 200);
+      const input = document.getElementById('dilekceOutput');
+      html2canvas(input, { scale: 2, useCORS: true, backgroundColor: "#FFFFFF" }).then(canvas => {
+        const imgData = canvas.toDataURL('image/jpeg', 0.85);
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`${ad}_${soyad}_Bitirme_Dilekcesi.pdf`);
+      });
     });
   </script>
 </body>
 </html>
-
