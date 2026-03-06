@@ -6,22 +6,82 @@
   <title>Dilekçe Oluştur</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
+ <style>
     body { font-family: Arial, Helvetica, sans-serif; background-color: #f4f4f4; padding: 10px; margin: 0; }
     .container { max-width: 600px; margin: 20px auto; background: white; padding: 25px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; }
     h2 { text-align: center; color: #333; font-size: 1.3rem; margin-bottom: 20px; }
     label { display: block; margin-top: 15px; font-weight: bold; font-size: 14px; }
-    input, select, textarea { width: 100%; padding: 12px; margin-top: 6px; font-size: 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
-    .row-flex { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
-    .row-flex input { margin-top: 0; flex: 1; }
+    
+    /* Genel Input ve Select Ayarları */
+    input, select, textarea { 
+        width: 100%; 
+        padding: 12px; 
+        font-size: 16px; 
+        box-sizing: border-box; 
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        font-family: inherit; 
+    }
+
+    /* Esnek Satır Yapısı (Masaüstü için hizalama) */
+    .row-flex { 
+        display: flex; 
+        gap: 8px; 
+        align-items: stretch; /* Yükseklikleri eşitler */
+        margin-top: 6px; 
+    }
+
+    .row-flex input, .row-flex select, .email-suffix {
+        height: 48px; /* Tüm elemanlar aynı yükseklikte */
+        margin-top: 0 !important;
+    }
+
+    /* Mavi Kutu Stili */
+    .email-suffix {
+        background-color: #007bff;
+        color: white;
+        padding: 0 15px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 14px;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+    }
+
+    /* Ünvan ve İsim kutusu oranları */
+    #unvan { flex: 0 0 130px; }
+    #danismanAdSoyad { flex: 1; }
+    #ad, #soyad { flex: 1; }
+    #adana { flex: 1; }
+
     button { width: 100%; padding: 15px; font-size: 18px; cursor: pointer; background-color: #28a745; color: white; border: none; border-radius: 4px; margin-top: 25px; font-weight: bold; }
+    
+    /* PDF Çıktı Alanı (Gizli) */
     #pdf-container { position: absolute; left: -9999px; top: 0; }
     #dilekceOutput { background: white; color: black; width: 190mm; padding: 20mm; box-sizing: border-box; line-height: 1.5; font-size: 11pt; }
     .center-header { text-align: center; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
     .info-row { display: flex; margin-bottom: 4px; }
     .info-label { width: 130px; font-weight: bold; }
     .red-note { color: #b30000; font-weight: bold; text-align: center; font-size: 11pt; margin-top: 20px; }
-  </style>
+
+    /* --- MOBİL UYUM --- */
+    @media (max-width: 600px) {
+        .container { margin: 10px; padding: 15px; }
+        .row-flex { 
+            flex-direction: column; /* Mobilde kutuları alt alta dizer */
+            align-items: stretch;
+        }
+        .row-flex input, .row-flex select, .email-suffix {
+            width: 100% !important;
+            flex: none !important; /* Mobil modda oranları sıfırla */
+        }
+        .email-suffix { height: 45px; }
+        h2 { font-size: 1.1rem; }
+    }
+</style>
 </head>
 <body>
 
@@ -36,10 +96,10 @@
       <input type="text" id="numara" inputmode="numeric" required />
       
       <label>YTÜ E-posta Kullanıcı Adı:</label>
-      <div class="row-flex">
-        <input type="text" id="emailUsername" placeholder="kullanici.adi" required oninput="emailKontrol(this)" />
-        <span style="font-weight:bold">@std.yildiz.edu.tr</span>
-      </div>
+<div class="row-flex">
+  <input type="text" id="adana" placeholder="kullanici.adi" required oninput="emailKontrol(this)" />
+  <div class="email-suffix">@std.yildiz.edu.tr</div>
+</div>
 
       <label>Cep Telefonu:</label>
       <input type="text" id="telefon" placeholder="05XX XXX XX XX" inputmode="tel" required />
@@ -52,15 +112,15 @@
 </select>
 
       <label>Öğretim Üyesi:</label>
-      <div class="row-flex">
-        <select id="unvan" style="flex: 0.4;">
-          <option value="Prof. Dr.">Prof. Dr.</option>
-          <option value="Doç. Dr.">Doç. Dr.</option>
-          <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
-          <option value="Öğr. Gör. Dr.">Öğr. Gör. Dr.</option>
-        </select>
-        <input type="text" id="danismanAdSoyad" placeholder="Ad Soyad" required />
-      </div>
+<div class="row-flex">
+  <select id="unvan">
+    <option value="Prof. Dr.">Prof. Dr.</option>
+    <option value="Doç. Dr.">Doç. Dr.</option>
+    <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
+    <option value="Öğr. Gör. Dr.">Öğr. Gör. Dr.</option>
+  </select>
+  <input type="text" id="danismanAdSoyad" placeholder="Ad Soyad" required />
+</div>
       <label>Bitirme Çalışması Konusu:</label>
       <textarea id="tezkonusu" rows="3" placeholder="Konu başlığını yazınız..." required></textarea>
       <button type="submit">📄 PDF Olarak İndir</button>
@@ -78,10 +138,10 @@
       </p>
 
       <div style="margin: 20px 0;">
-        <div class="info-row"><span class="info-label">Ad Soyad</span><span>: </span><span id="outAdSoyad"></span></div>
-        <div class="info-row"><span class="info-label">Öğrenci No</span><span>: </span><span id="outNo"></span></div>
-        <div class="info-row"><span class="info-label">E-posta</span><span>: </span><span id="outEmail"></span></div>
-        <div class="info-row"><span class="info-label">Cep Telefonu</span><span>: </span><span id="outTel"></span></div>
+        <div class="info-row"><span class="info-label">Ad Soyad</span><span>:&nbsp </span><span id="outAdSoyad"></span></div>
+        <div class="info-row"><span class="info-label">Öğrenci No</span><span>:&nbsp </span><span id="outNo"></span></div>
+        <div class="info-row"><span class="info-label">E-posta</span><span>:&nbsp </span><span id="outEmail"></span></div>
+        <div class="info-row"><span class="info-label">Cep Telefonu</span><span>:&nbsp </span><span id="outTel"></span></div>
       </div>
 
       <div style="text-align: right; margin: 20px 0;" id="outTarih"></div>
@@ -124,19 +184,25 @@
       return text.replace(/i/g, "İ").replace(/ı/g, "I").replace(/ğ/g, "Ğ").replace(/ü/g, "Ü").replace(/ş/g, "Ş").replace(/ö/g, "Ö").replace(/ç/g, "Ç").toUpperCase();
     }
 
-    function akilliFormat(text, dil) {
-        if (!text) return "";
-        return text.split(' ').map(word => {
-            if(word.length === 0) return word;
-            let ilk;
-            if (dil === "TR") {
-                ilk = word.charAt(0).replace(/i/g, "İ").replace(/ı/g, "I").toUpperCase();
-            } else {
-                ilk = word.charAt(0).toUpperCase();
-            }
-            return ilk + word.slice(1).toLowerCase();
-        }).join(' ');
-    }
+function akilliFormat(text, dil) {
+    if (!text) return "";
+    return text.split(' ').map(word => {
+        if (word.length === 0) return word;
+
+        let ilk, kalan;
+        if (dil === "TR") {
+            // İlk harfi Türkçe kurallarına göre büyüt
+            ilk = word.charAt(0).replace(/i/g, "İ").replace(/ı/g, "I").toUpperCase();
+            // Kalan harfleri Türkçe kurallarına göre küçült (I -> ı, İ -> i)
+            kalan = word.slice(1).replace(/İ/g, "i").replace(/I/g, "ı").replace(/Ğ/g, "ğ").replace(/Ü/g, "ü").replace(/Ş/g, "ş").replace(/Ö/g, "ö").replace(/Ç/g, "ç").toLowerCase();
+        } else {
+            // İngilizce kuralları
+            ilk = word.charAt(0).toUpperCase();
+            kalan = word.slice(1).toLowerCase();
+        }
+        return ilk + kalan;
+    }).join(' ');
+}
 
     document.getElementById("dilekceForm").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -149,7 +215,7 @@ if (!dil) {
 
       const ad = trUpper(document.getElementById("ad").value.trim());
       const soyad = trUpper(document.getElementById("soyad").value.trim());
-      const email = document.getElementById("emailUsername").value.trim() + "@std.yildiz.edu.tr";
+      const email = document.getElementById("adana").value.trim() + "@std.yildiz.edu.tr";
       const tarih = new Date();
       
       const ay = tarih.getMonth() + 1;
