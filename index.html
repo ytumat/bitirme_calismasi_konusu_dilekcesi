@@ -138,9 +138,10 @@
   <option value="EN">İngilizce</option>
 </select>
 
-      <label>Öğretim Üyesi:</label>
+      <label>Öğretim Üyesi (Ünvan-Ad Soyad):</label>
 <div class="row-flex">
-  <select id="unvan">
+  <select id="unvan" required>
+    <option value="" disabled selected>Seçiniz</option>
     <option value="Prof. Dr.">Prof. Dr.</option>
     <option value="Doç. Dr.">Doç. Dr.</option>
     <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
@@ -234,6 +235,11 @@ function akilliFormat(text, dil) {
     document.getElementById("dilekceForm").addEventListener("submit", function (e) {
       e.preventDefault();
       const dil = document.getElementById("tezDili").value;
+const unvanSecimi = document.getElementById("unvan").value;
+if (!unvanSecimi) {
+    alert("Lütfen öğretim üyesinin ünvanını seçiniz!");
+    return;
+}
 
 if (!dil) {
     alert("Lütfen tezin dilini seçiniz!");
