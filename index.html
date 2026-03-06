@@ -70,30 +70,40 @@
     .red-note { color: #b30000; font-weight: bold; text-align: center; font-size: 11pt; margin-top: 20px; }
 
     /* --- MOBİL UYUM --- */
-   @media (max-width: 600px) {
+  /* --- MOBİL UYUM (Kesin Çözüm) --- */
+@media (max-width: 600px) {
     .container { margin: 10px; padding: 15px; }
     
     .row-flex { 
-        flex-direction: column; 
+        flex-direction: column; /* Genel olarak her şey alt alta */
         gap: 8px;
     }
 
-    /* E-posta alanını mobilde yan yana tutalım ki mavi kutu çok uzamasın */
-    .row-flex:has(#adana) {
-        flex-direction: row !important;
+    /* E-posta ve Ünvan satırlarını mobilde YAN YANA tutuyoruz */
+    .row-flex:has(#adana), 
+    .row-flex:has(#unvan) {
+        flex-direction: row !important; /* Alt alta gelmeyi zorla iptal et */
         align-items: stretch;
     }
 
-    .row-flex input, .row-flex select {
-        width: 100%;
+    /* Ünvan kutusunu mobilde daraltalım */
+    #unvan {
+        flex: 0 0 100px !important; /* Mobilde sadece 100px kaplasın */
+        font-size: 13px; /* Yazıyı biraz küçültelim ki sığsın */
     }
 
-    /* Mobilde mavi kutu ayarı */
+    /* E-posta uzantısını mobilde daraltalım */
     .email-suffix { 
         height: 48px; 
         padding: 0 8px;
-        font-size: 12px; /* Mobilde taşmaması için küçük yazı */
-        flex: 0 0 auto; /* Uzamasını engeller */
+        font-size: 11px; /* Uzun uzantı sığsın diye */
+        flex: 0 0 auto; 
+    }
+
+    /* İsim ve E-posta giriş alanları geri kalan yeri doldursun */
+    #danismanAdSoyad, #adana {
+        flex: 1;
+        min-width: 0; /* Taşmayı önler */
     }
 
     h2 { font-size: 1.1rem; }
