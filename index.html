@@ -38,18 +38,20 @@
 
     /* Mavi Kutu Stili */
     .email-suffix {
-        background-color: #007bff;
-        color: white;
-        padding: 0 15px;
-        border-radius: 4px;
-        font-weight: bold;
-        font-size: 14px;
-        white-space: nowrap;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 0 0 auto;
-    }
+    background-color: #007bff;
+    color: white;
+    padding: 0 12px; /* Yatay boşluğu biraz daralttık */
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 13px; /* Yazıyı bir tık küçülttük */
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    height: 48px; 
+    box-sizing: border-box;
+}
 
     /* Ünvan ve İsim kutusu oranları */
     #unvan { flex: 0 0 130px; }
@@ -68,19 +70,34 @@
     .red-note { color: #b30000; font-weight: bold; text-align: center; font-size: 11pt; margin-top: 20px; }
 
     /* --- MOBİL UYUM --- */
-    @media (max-width: 600px) {
-        .container { margin: 10px; padding: 15px; }
-        .row-flex { 
-            flex-direction: column; /* Mobilde kutuları alt alta dizer */
-            align-items: stretch;
-        }
-        .row-flex input, .row-flex select, .email-suffix {
-            width: 100% !important;
-            flex: none !important; /* Mobil modda oranları sıfırla */
-        }
-        .email-suffix { height: 45px; }
-        h2 { font-size: 1.1rem; }
+   @media (max-width: 600px) {
+    .container { margin: 10px; padding: 15px; }
+    
+    .row-flex { 
+        flex-direction: column; 
+        gap: 8px;
     }
+
+    /* E-posta alanını mobilde yan yana tutalım ki mavi kutu çok uzamasın */
+    .row-flex:has(#adana) {
+        flex-direction: row !important;
+        align-items: stretch;
+    }
+
+    .row-flex input, .row-flex select {
+        width: 100%;
+    }
+
+    /* Mobilde mavi kutu ayarı */
+    .email-suffix { 
+        height: 48px; 
+        padding: 0 8px;
+        font-size: 12px; /* Mobilde taşmaması için küçük yazı */
+        flex: 0 0 auto; /* Uzamasını engeller */
+    }
+
+    h2 { font-size: 1.1rem; }
+}
 </style>
 </head>
 <body>
